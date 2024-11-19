@@ -1,1 +1,82 @@
-351654
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人財務管理系統</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>個人財務管理系統</h1>
+        <nav>
+            <a href="#login-section">登入</a>
+            <a href="#register-section">註冊</a>
+            <a href="#records-section">收支記錄</a>
+            <a href="#analysis-section">月度分析</a>
+        </nav>
+    </header>
+    <main>
+        <!-- 登入區 -->
+        <section id="login-section">
+            <h2>登入</h2>
+            <form>
+                <label for="login-email">電子郵件:</label>
+                <input type="email" id="login-email" required>
+                <label for="login-password">密碼:</label>
+                <input type="password" id="login-password" required>
+                <button type="submit">登入</button>
+            </form>
+        </section>
+
+        <!-- 註冊區 -->
+        <section id="register-section">
+            <h2>註冊</h2>
+            <form>
+                <label for="register-name">姓名:</label>
+                <input type="text" id="register-name" required>
+                <label for="register-email">電子郵件:</label>
+                <input type="email" id="register-email" required>
+                <label for="register-password">密碼:</label>
+                <input type="password" id="register-password" required>
+                <button type="submit">註冊</button>
+            </form>
+        </section>
+
+        <!-- 收支記錄區 -->
+        <section id="records-section">
+            <h2>收支記錄</h2>
+            <form>
+                <label for="record-type">類型:</label>
+                <select id="record-type" required>
+                    <option value="income">收入</option>
+                    <option value="expense">支出</option>
+                </select>
+                <label for="record-amount">金額:</label>
+                <input type="number" id="record-amount" required>
+                <label for="record-date">日期:</label>
+                <input type="date" id="record-date" required>
+                <button type="submit">新增記錄</button>
+            </form>
+            <div id="record-list">
+                <h3>歷史記錄</h3>
+                <ul>
+                    <!-- 收支記錄將在這裡顯示 -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- 月度分析區 -->
+        <section id="analysis-section">
+            <h2>月度分析</h2>
+            <canvas id="chart" width="400" height="200"></canvas>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
