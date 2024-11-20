@@ -3,17 +3,19 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    background-image: url('background.png'); /* 替換為你的圖片檔名 */
+    background-size: cover; /* 確保背景圖片覆蓋整個畫面 */
+    background-position: center; /* 將圖片置中 */
+    background-attachment: fixed; /* 背景固定不隨滾動 */
     color: #333;
 }
 
 header {
-    background: #333;
+    background: rgba(0, 0, 0, 0.7); /* 使用半透明黑色背景讓文字更易辨識 */
     color: #fff;
     padding: 1em 0;
     text-align: center;
 }
-
 header h1 {
     margin: 0;
     padding: 20px 0;
@@ -45,9 +47,7 @@ main {
 }
 
 .content-box {
-    width: 80%;
-    max-width: 500px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
