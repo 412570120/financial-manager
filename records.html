@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人財務管理系統 - 收支記錄</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>收支記錄</h1>
+        <nav>
+            <a href="analysis.html">月度分析</a>
+            <a href="index.html">登出</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content-box">
+            <h2>新增記錄</h2>
+            <form>
+                <label for="record-type">類型:</label>
+                <select id="record-type" required>
+                    <option value="income">收入</option>
+                    <option value="expense">支出</option>
+                </select>
+                <label for="record-amount">金額:</label>
+                <input type="number" id="record-amount" required>
+                <label for="record-date">日期:</label>
+                <input type="date" id="record-date" required>
+                <button type="submit">新增記錄</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+</body>
+</html>
