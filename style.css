@@ -81,6 +81,80 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+/* 浮動按鈕區域 */
+#floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#floating-buttons button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#floating-buttons button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 目錄互動效果 */
+nav .menu-item {
+    position: relative;
+    padding: 5px 15px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+nav .menu-item:hover {
+    color: #5cb85c;
+}
+
+nav .menu-item::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #5cb85c;
+    transition: all 0.3s ease;
+}
+
+nav .menu-item:hover::after {
+    left: 0;
+    width: 100%;
+}
+
+/* 彈出框樣式 */
+#helpTooltip {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 80px;
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 14px;
+}
+
 
 footer {
     text-align: center;
