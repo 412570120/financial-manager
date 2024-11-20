@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["1月", "2月", "3月", "4月", "5月"],
+            labels: ["1月", "2月", "3月", "4月", "5月"], 
             datasets: [
                 {
                     label: "收入",
