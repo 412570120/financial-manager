@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人財務管理系統 - 月度分析</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>月度分析</h1>
+        <nav>
+            <a href="records.html">收支記錄</a>
+            <a href="index.html">登出</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content-box">
+            <h2>分析圖表</h2>
+            <canvas id="chart" width="400" height="200"></canvas>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
