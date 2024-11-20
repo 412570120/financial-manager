@@ -154,6 +154,9 @@ nav .menu-item:hover::after {
     z-index: 1000;
     font-size: 14px;
 }
+#floating-buttons[hidden] {
+    display: none;
+}
 
 
 footer {
