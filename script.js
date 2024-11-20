@@ -27,3 +27,33 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const scrollTopButton = document.getElementById("scrollTop");
+    const helpButton = document.getElementById("helpButton");
+
+    // 回到頂部功能
+    scrollTopButton.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // 幫助彈出框功能
+    helpButton.addEventListener("click", () => {
+        let tooltip = document.getElementById("helpTooltip");
+        if (!tooltip) {
+            tooltip = document.createElement("div");
+            tooltip.id = "helpTooltip";
+            tooltip.innerText = "如需幫助，請聯繫 support@example.com";
+            document.body.appendChild(tooltip);
+        }
+        tooltip.style.display = tooltip.style.display === "none" ? "block" : "none";
+    });
+
+    // 自動隱藏彈出框
+    document.addEventListener("click", (event) => {
+        if (!event.target.matches("#helpButton")) {
+            const tooltip = document.getElementById("helpTooltip");
+            if (tooltip) tooltip.style.display = "none";
+        }
+    });
+});
+
