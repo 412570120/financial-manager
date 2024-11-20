@@ -16,6 +16,7 @@ header {
     padding: 1em 0;
     text-align: center;
 }
+
 header h1 {
     margin: 0;
     padding: 20px 0;
@@ -47,7 +48,9 @@ main {
 }
 
 .content-box {
-    background: rgba(500, 500, 500, 0.8); /* 半透明白色背景 */
+    width: 80%;
+    max-width: 400px; /* 限制最大寬度 */
+    background: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
@@ -64,14 +67,17 @@ h2 {
 form label {
     display: block;
     margin: 10px 0 5px;
+    font-weight: bold; /* 強調標籤文字 */
+    color: #333;
 }
 
 form input, form select, form button {
-    width: 100%;
+    width: 100%; /* 設定元素寬度與父容器一致 */
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* 增加下方空間，避免元件擠在一起 */
     border: 1px solid #ddd;
     border-radius: 5px;
+    box-sizing: border-box; /* 包含內邊距，避免寬度超出 */
 }
 
 form button {
@@ -79,10 +85,32 @@ form button {
     color: #fff;
     border: none;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 form button:hover {
     background: #4cae4c;
+}
+
+/* 提示文字容器 */
+#already-registered {
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(230, 230, 250, 0.9); /* 淺紫背景，與主框架一致 */
+    border-radius: 8px;
+}
+
+#already-registered a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#already-registered a:hover {
+    text-decoration: underline;
 }
 
 /* 頁腳 */
