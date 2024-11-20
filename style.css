@@ -47,7 +47,7 @@ main {
 }
 
 .content-box {
-    background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+    background: rgba(500, 500, 500, 0.8); /* 半透明白色背景 */
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
