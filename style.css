@@ -67,6 +67,7 @@ h2 {
 form label {
     display: block;
     margin: 10px 0 5px;
+    font-family: Arial, sans-serif;
     font-weight: bold; /* 強調標籤文字 */
     color: #333;
 }
@@ -107,6 +108,7 @@ form button:hover {
     color: #0066cc;
     text-decoration: none;
     font-weight: bold;
+    font-family: Arial, sans-serif;
 }
 
 #already-registered a:hover {
