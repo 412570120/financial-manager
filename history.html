@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人財務管理系統 - 歷史紀錄</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>歷史紀錄</h1>
+        <nav>
+            <a href="analysis.html">月度分析</a>
+            <a href="record.html">收支記錄</a>
+            <a href="index.html">登出</a>
+        </nav>
+    </header>
+    <main>
+        <section class="content-box">
+            <h2>歷史記錄列表</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>類型</th>
+                        <th>款項</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody id="history-records">
+                    <!-- JavaScript 可用來動態生成這些記錄 -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+    <script src="history.js"></script>
+</body>
+</html>
