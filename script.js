@@ -35,18 +35,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form) {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
-            const popup = document.getElementById("success-popup");
-            popup.classList.remove("hidden");
+            
+            // 檢查所有欄位是否已填寫
+            const type = document.getElementById("record-type").value;
+            const item = document.getElementById("record-menu").value.trim();
+            const amount = document.getElementById("record-amount").value;
+            const date = document.getElementById("record-date").value;
+
+            if (!type || !item || !amount || !date) {
+                const errorPopup = document.getElementById("error-popup");
+                errorPopup.classList.remove("hidden");
+                return;
+            }
+
+            // 如果所有欄位完整，顯示成功彈窗
+            const successPopup = document.getElementById("success-popup");
+            successPopup.classList.remove("hidden");
             e.target.reset();
         });
     }
 
     // 關閉彈窗
-    const closePopupButton = document.getElementById("close-popup");
-    if (closePopupButton) {
-        closePopupButton.addEventListener("click", () => {
-            const popup = document.getElementById("success-popup");
+    const closePopupButtons = document.querySelectorAll(".close-popup");
+    closePopupButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const popup = button.closest(".popup");
             popup.classList.add("hidden");
         });
-    }
+    });
 });
