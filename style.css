@@ -130,6 +130,7 @@ form button:hover {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     text-align: center;
+    z-index: 1000;
 }
 
 #success-popup button {
@@ -145,6 +146,7 @@ form button:hover {
 #success-popup button:hover {
     background-color: #0056b3;
 }
+
 
 /* 頁腳 */
 footer {
