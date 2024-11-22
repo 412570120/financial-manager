@@ -27,3 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 });
+document.getElementById("add-record-form").addEventListener("submit", (e) => {
+    // 阻止表單預設提交行為
+    e.preventDefault();
+
+    // 顯示彈窗
+    const popup = document.getElementById("success-popup");
+    popup.classList.remove("hidden");
+
+    // 清空表單
+    e.target.reset();
+});
+
+// 綁定關閉彈窗的事件
+document.getElementById("close-popup").addEventListener("click", () => {
+    const popup = document.getElementById("success-popup");
+    popup.classList.add("hidden");
+});
+
