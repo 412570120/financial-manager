@@ -27,3 +27,24 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("record-form");
+    const modal = document.getElementById("success-modal");
+    const closeModalButton = document.getElementById("close-modal");
+
+    // 表單提交事件
+    form.addEventListener("submit", (event) => {
+        event.preventDefault(); // 防止表單預設提交行為
+        modal.classList.remove("hidden");
+        modal.classList.add("visible");
+    });
+
+    // 關閉彈窗事件
+    closeModalButton.addEventListener("click", () => {
+        modal.classList.remove("visible");
+        modal.classList.add("hidden");
+        form.reset(); // 清空表單
+    });
+});
+
