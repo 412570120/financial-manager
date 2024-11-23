@@ -52,6 +52,22 @@
             alert("登出成功!"); // 顯示提示框
             window.location.href = "index.html"; // 跳轉至登入頁
         });
+
+        // 綁定新增記錄表單提交事件
+        document.getElementById("add-record-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // 防止表單提交刷新頁面
+
+            // 顯示新增成功彈窗
+            document.getElementById("success-popup").classList.remove("hidden");
+
+            // 清空表單
+            document.getElementById("add-record-form").reset();
+        });
+
+        // 綁定彈窗的關閉按鈕
+        document.getElementById("close-popup").addEventListener("click", function () {
+            document.getElementById("success-popup").classList.add("hidden");
+        });
     </script>
 </body>
 </html>
