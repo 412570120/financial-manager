@@ -20,11 +20,6 @@ header {
 header h1 {
     margin: 0;
     padding: 20px 0;
-    transition: transform 0.3s ease; /* 加入浮動效果 */
-}
-
-header h1:hover {
-    transform: scale(1.1); /* 滑過時放大 1.1 倍 */
 }
 
 nav {
@@ -36,12 +31,12 @@ nav a {
     text-decoration: none;
     margin: 0 15px;
     position: relative;
-    transition: color 0.3s, transform 0.3s; /* 平滑過渡效果 */
+    transition: transform 0.3s ease, color 0.3s ease; /* 平滑過渡效果 */
 }
 
 nav a:hover {
-    color: #ffd700;
     transform: scale(1.2); /* 滑過時放大 1.2 倍 */
+    color: #ffd700; /* 滑過時文字變為金色 */
 }
 
 /* 主內容區域 */
@@ -114,7 +109,6 @@ form button:hover {
     text-decoration: none;
     font-weight: bold;
     font-family: Arial, sans-serif;
-    font-weight: bold;
 }
 
 #already-registered a:hover {
@@ -174,31 +168,4 @@ form button:hover {
 
 .navigate-button:hover {
     background-color: #45a049;
-}
-
-@keyframes gradient-flow {
-    0% {
-        background-position: 0% 50%;
-    }
-    100% {
-        background-position: 100% 50%;
-    }
-}
-
-.gradient-text {
-    font-size: 2.5em;
-    font-weight: bold;
-    background: linear-gradient(90deg, #ff7eb3, #ff758c, #fe6a96, #ff7eb3);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradient-flow 3s linear infinite;
-}
-
-/* 頁腳 */
-footer {
-    text-align: center;
-    padding: 10px;
-    background: #333;
-    color: #fff;
 }
