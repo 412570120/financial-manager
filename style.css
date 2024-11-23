@@ -148,8 +148,15 @@ form button:hover {
 }
 
 /* style.css */
+.content-box {
+    display: flex;
+    flex-direction: column; /* 垂直排列元素 */
+    align-items: center; /* 水平置中 */
+    justify-content: center; /* 垂直置中 */
+    height: 100%; /* 確保父容器填滿可用空間 */
+}
+
 .navigate-button {
-    margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #4CAF50;
@@ -157,11 +164,13 @@ form button:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    text-align: center;
 }
 
 .navigate-button:hover {
     background-color: #45a049;
 }
+
 
 
 @keyframes gradient-flow {
