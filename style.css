@@ -147,6 +147,23 @@ form button:hover {
     background-color: #0056b3;
 }
 
+/* style.css */
+.navigate-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigate-button:hover {
+    background-color: #45a049;
+}
+
+
 @keyframes gradient-flow {
     0% {
         background-position: 0% 50%;
