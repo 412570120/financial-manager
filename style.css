@@ -35,9 +35,19 @@ nav a {
     transition: color 0.3s ease, transform 0.3s ease; /* 平滑過渡效果 */
 }
 
+/* 修改 header nav a 的樣式，加入 hover 時字體放大的效果 */
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; /* 增加 font-size 的過渡效果 */
+}
+
 header nav a:hover {
     color: #ffd700; /* 金色文字 */
     transform: scale(1.2); /* 滑過時放大 1.2 倍 */
+    font-size: 1.2em; /* 增加字體大小 */
     text-shadow: 0px 0px 5px rgba(255, 215, 0, 0.8); /* 滑過時新增光暈效果 */
 }
 
