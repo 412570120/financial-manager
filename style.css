@@ -20,10 +20,7 @@ header {
 header h1 {
     margin: 0;
     padding: 20px 0;
-    transition: transform 0.3s ease; /* 加入浮動效果 */
-}
-header h1:hover {
-    transform: scale(1.1); /* 滑過時放大 1.1 倍 */
+    /* 移除滑鼠滑過大標題時的浮動效果 */
 }
 
 nav {
@@ -35,14 +32,13 @@ nav a {
     text-decoration: none;
     margin: 0 15px;
     position: relative;
-    transition: color 0.3s, transform 0.3s;
-    transition: color 0.3s, transform 0.3s; /* 平滑過渡效果 */
+    transition: color 0.3s, transform 0.3s ease; /* 平滑過渡效果 */
 }
 
 nav a:hover {
-    color: #ffd700;
-    transform: scale(1.1);
-    transform: scale(1.2); /* 滑過時放大 1.2 倍 */
+    color: #ffd700; /* 滑動時文字變為金色 */
+    transform: scale(1.2); /* 滑動時放大 1.2 倍 */
+    text-shadow: 0px 0px 5px rgba(255, 215, 0, 0.8); /* 滑動時新增光暈效果 */
 }
 
 /* 主內容區域 */
@@ -115,7 +111,6 @@ form button:hover {
     text-decoration: none;
     font-weight: bold;
     font-family: Arial, sans-serif;
-    ont-weight: bold;
     font-weight: bold;
 }
 
