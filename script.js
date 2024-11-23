@@ -3,27 +3,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctx = document.getElementById("chart")?.getContext("2d");
     if (ctx) {
         new Chart(ctx, {
-            type: "bar",
+            type: "pie", // 改為圓餅圖
             data: {
-                labels: ["1月", "2月", "3月", "4月", "5月"],
+                labels: ["1月", "2月", "3月", "4月", "5月"], // 標籤
                 datasets: [
                     {
-                        label: "收入",
-                        data: [5000, 6000, 4000, 7000, 8000],
-                        backgroundColor: "rgba(75, 192, 192, 0.6)",
-                    },
-                    {
-                        label: "支出",
-                        data: [3000, 4000, 3000, 5000, 6000],
-                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        label: "收入與支出比例", // 圖表名稱
+                        data: [25000, 15000, 20000, 15000, 14000], // 各區數據
+                        backgroundColor: [
+                            "rgba(75, 192, 192, 0.6)", // 每個區塊的顏色
+                            "rgba(255, 99, 132, 0.6)",
+                            "rgba(255, 205, 86, 0.6)",
+                            "rgba(54, 162, 235, 0.6)",
+                            "rgba(153, 102, 255, 0.6)",
+                        ],
                     },
                 ],
             },
             options: {
-                responsive: true,
+                responsive: true, // 自適應
                 plugins: {
                     legend: {
-                        position: "top",
+                        position: "top", // 圖例顯示在上方
                     },
                 },
             },
@@ -41,11 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // history.js
-document.getElementById('to-records-page').addEventListener('click', () => {
-    window.location.href = 'records.html';
-});
-
+    // 跳轉到收支記錄頁面
+    const toRecordsPageButton = document.getElementById('to-records-page');
+    if (toRecordsPageButton) {
+        toRecordsPageButton.addEventListener('click', () => {
+            window.location.href = 'records.html';
+        });
+    }
 
     // 關閉彈窗
     const closePopupButton = document.getElementById("close-popup");
@@ -56,5 +59,4 @@ document.getElementById('to-records-page').addEventListener('click', () => {
         });
     }
 });
-
 
