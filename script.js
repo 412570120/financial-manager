@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // history.js
+document.getElementById('to-records-page').addEventListener('click', () => {
+    window.location.href = 'records.html';
+});
+
+
     // 關閉彈窗
     const closePopupButton = document.getElementById("close-popup");
     if (closePopupButton) {
