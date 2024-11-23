@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 初始化圖表
+    // 初始化圖表 
     const ctx = document.getElementById("chart")?.getContext("2d");
     if (ctx) {
         new Chart(ctx, {
