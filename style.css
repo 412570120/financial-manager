@@ -32,14 +32,15 @@ nav a {
     text-decoration: none;
     margin: 0 15px;
     position: relative;
-    transition: color 0.3s, transform 0.3s ease; /* 平滑過渡效果 */
+    transition: color 0.3s ease, transform 0.3s ease; /* 平滑過渡效果 */
 }
 
-nav a:hover {
-    color: #ffd700; /* 滑動時文字變為金色 */
-    transform: scale(1.2); /* 滑動時放大 1.2 倍 */
-    text-shadow: 0px 0px 5px rgba(255, 215, 0, 0.8); /* 滑動時新增光暈效果 */
+header nav a:hover {
+    color: #ffd700; /* 金色文字 */
+    transform: scale(1.2); /* 滑過時放大 1.2 倍 */
+    text-shadow: 0px 0px 5px rgba(255, 215, 0, 0.8); /* 滑過時新增光暈效果 */
 }
+
 
 /* 主內容區域 */
 main {
