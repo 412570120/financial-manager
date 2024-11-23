@@ -12,7 +12,7 @@
         <nav>
             <a href="analysis.html">月度分析</a>
             <a href="history.html">我的帳簿</a>
-            <a id="logout-link" href="#">登出</a> <!-- 添加 id -->
+            <a id="logout-link" href="#">登出</a>
         </nav>
     </header>
     <main>
@@ -37,22 +37,19 @@
             </form>
         </section>
     </main>
-    <div id="success-popup" class="hidden">
-        <p>新增成功！</p>
-        <button id="close-popup">確定</button>
-    </div>
     <footer>
         <p>&copy; 2024 個人財務管理系統</p>
     </footer>
     <script>
-        // 新增登出按鈕點擊事件
+        // 為登出按鈕綁定點擊事件
         document.getElementById("logout-link").addEventListener("click", function (event) {
-            event.preventDefault(); // 防止連結的預設跳轉
-            alert("您已登出!"); // 顯示登出彈窗
+            event.preventDefault(); // 阻止連結跳轉
+            alert("您已登出!"); // 顯示彈窗
             window.location.href = "index.html"; // 跳轉至登入頁
         });
     </script>
 </body>
 </html>
+
 
 
