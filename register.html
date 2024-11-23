@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人財務管理系統 - 註冊</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        function showRegistrationSuccess(event) {
+            event.preventDefault(); // 防止表單提交導致頁面重新載入
+            alert("註冊成功！");
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -12,7 +18,7 @@
     </header>
     <main>
         <section class="content-box">
-            <form>
+            <form onsubmit="showRegistrationSuccess(event)">
                 <label for="register-name">使用者名稱:</label>
                 <input type="text" id="register-name" required>
                 <label for="register-email">電子郵件:</label>
