@@ -46,13 +46,13 @@
     </footer>
     <script>
         // 新增登出按鈕點擊事件
-        document.getElementById("logout-link").addEventListener("click", (e) => {
-            e.preventDefault(); // 阻止默認跳轉
-            if (confirm("您已登出!")) { // 顯示彈窗，確認後執行
-                window.location.href = "index.html"; // 返回登入頁
-            }
+        document.getElementById("logout-link").addEventListener("click", function (event) {
+            event.preventDefault(); // 防止連結的預設跳轉
+            alert("您已登出!"); // 顯示登出彈窗
+            window.location.href = "index.html"; // 跳轉至登入頁
         });
     </script>
 </body>
 </html>
+
 
