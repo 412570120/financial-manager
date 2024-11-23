@@ -31,6 +31,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 模擬資料
+const records = [
+    { date: "2024-11-01", type: "收入", item: "薪水", amount: 35000 },
+    { date: "2024-11-05", type: "支出", item: "餐飲", amount: 1200 },
+    { date: "2024-11-10", type: "支出", item: "交通", amount: 800 },
+    { date: "2024-11-12", type: "收入", item: "紅利", amount: 1500 },
+    { date: "2024-11-15", type: "支出", item: "購物", amount: 4000 }
+];
+
+// 動態插入資料
+const tbody = document.getElementById("history-records");
+
+records.forEach(record => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${record.date}</td>
+        <td>${record.type}</td>
+        <td>${record.item}</td>
+        <td>${record.amount}</td>
+    `;
+    tbody.appendChild(row);
+});
+
+
 
     // 新增記錄表單的提交事件
     const form = document.getElementById("add-record-form");
