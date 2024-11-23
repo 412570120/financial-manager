@@ -33,22 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // script.js
 
-// 檢查 URL 中是否包含 'logout' 參數
-window.addEventListener('load', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('logout')) {
-        alert("登出成功！");
-    }
-});
 
-// 通用登出功能，設置登出後重定向並傳遞參數
-function logout() {
-    alert("登出成功！");
-    window.location.href = "index.html?logout=true";  // 重定向到登入頁並附加參數
-}
-
-// 將登出功能暴露給其他頁面使用
-window.logout = logout;
 
 
     // 模擬資料
