@@ -1,35 +1,107 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // 初始化圖表 
-    const ctx = document.getElementById("chart")?.getContext("2d");
-    if (ctx) {
-        new Chart(ctx, {
-            type: "pie", // 改為圓餅圖
-            data: {
-                labels: ["1月", "2月", "3月", "4月", "5月"], // 標籤
-                datasets: [
-                    {
-                        label: "收入與支出比例", // 圖表名稱
-                        data: [25000, 15000, 20000, 15000, 14000], // 各區數據
-                        backgroundColor: [
-                            "rgba(75, 192, 192, 0.6)", // 每個區塊的顏色
-                            "rgba(255, 99, 132, 0.6)",
-                            "rgba(255, 205, 86, 0.6)",
-                            "rgba(54, 162, 235, 0.6)",
-                            "rgba(153, 102, 255, 0.6)",
-                        ],
-                    },
-                ],
-            },
-            options: {
-                responsive: true, // 自適應
-                plugins: {
-                    legend: {
-                        position: "top", // 圖例顯示在上方
+// 各月份的數據
+const monthlyData = {
+    "1月": {
+        labels: ["娛樂支出", "交通支出", "飲食支出", "其他支出"],
+        data: [5000, 2000, 8000, 5000],
+        backgroundColor: [
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(54, 162, 235, 0.6)",
+            "rgba(255, 205, 86, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+        ],
+    },
+    "2月": {
+        labels: ["娛樂支出", "交通支出", "飲食支出", "其他支出"],
+        data: [6000, 3000, 7000, 4000],
+        backgroundColor: [
+            "rgba(153, 102, 255, 0.6)",
+            "rgba(255, 159, 64, 0.6)",
+            "rgba(255, 205, 86, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+        ],
+    },
+    "3月": {
+        labels: ["娛樂支出", "交通支出", "飲食支出", "其他支出"],
+        data: [4000, 2500, 9000, 5500],
+        backgroundColor: [
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(54, 162, 235, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(153, 102, 255, 0.6)",
+        ],
+    },
+    "4月": {
+        labels: ["娛樂支出", "交通支出", "飲食支出", "其他支出"],
+        data: [7000, 1500, 6000, 4500],
+        backgroundColor: [
+            "rgba(255, 205, 86, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(54, 162, 235, 0.6)",
+            "rgba(255, 159, 64, 0.6)",
+        ],
+    },
+    "5月": {
+        labels: ["娛樂支出", "交通支出", "飲食支出", "其他支出"],
+        data: [3000, 1000, 8000, 7000],
+        backgroundColor: [
+            "rgba(255, 159, 64, 0.6)",
+            "rgba(153, 102, 255, 0.6)",
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+        ],
+    },
+};
+
+let pieChart;
+
+// 顯示圓餅圖
+function showPieChart(month) {
+    const ctx = document.getElementById("chart").getContext("2d");
+
+    // 獲取該月份的數據
+    const { labels, data, backgroundColor } = monthlyData[month];
+
+    // 如果已經有圖表，則銷毀它
+    if (pieChart) {
+        pieChart.destroy();
+    }
+
+    // 創建新的圓餅圖
+    pieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    data: data,
+                    backgroundColor: backgroundColor,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top", // 圖例顯示在上方
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const value = context.raw;
+                            return `${context.label}: ${value} 元`;
+                        },
                     },
                 },
             },
-        });
-    }
+        },
+    });
+}
+
+// 預設顯示 1 月的數據
+document.addEventListener("DOMContentLoaded", () => {
+    showPieChart("1月");
+});
+
 
 // script.js
 
