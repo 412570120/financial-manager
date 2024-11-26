@@ -196,7 +196,7 @@ form button:hover {
 .gradient-text {
     font-size: 2.5em;
     font-weight: bold;
-    background: linear-gradient(90deg, #ff7eb3, #ff758c, #fe6a96, #ff7eb3);
+    background: linear-gradient(90deg, #fff);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
