@@ -12,10 +12,10 @@
         <nav>
             <a href="analysis.html">月度分析</a>
             <a href="records.html">收支記錄</a>
-             <a href="#" id="logout">登出</a> <!-- 登出按鈕 -->
+            <a href="#" id="logout">登出</a> <!-- 登出按鈕 -->
         </nav>
     </header>
-      <main>
+    <main>
         <section class="content-box">
             <button id="to-records-page" class="navigate-button">新增記錄</button>
             <table>
@@ -35,10 +35,16 @@
     </main>
     <script src="script.js"></script>
     <script>
+        // 登出按鈕功能
         document.getElementById("logout").addEventListener("click", (e) => {
             e.preventDefault();  // 防止連結直接跳轉
             alert("登出成功！");  // 彈出登出成功訊息
             window.location.href = "index.html?logout=true";  // 重定向到登入頁並附加參數
+        });
+
+        // 點擊新增記錄按鈕跳轉到收支記錄頁面
+        document.getElementById("to-records-page").addEventListener("click", () => {
+            window.location.href = "records.html";  // 跳轉到 records.html
         });
     </script>
     <footer>
