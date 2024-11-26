@@ -12,12 +12,21 @@
         <nav>
             <a href="records.html">收支記錄</a>
             <a href="history.html">我的帳簿</a>
-             <a href="#" id="logout">登出</a> <!-- 登出按鈕 -->
+            <a href="#" id="logout">登出</a> <!-- 登出按鈕 -->
         </nav>
     </header>
     <main>
         <section class="content-box">
             <h2>分析圖表</h2>
+            <!-- 月份選擇按鈕 -->
+            <div id="month-buttons">
+                <button class="month-btn" data-month="1">1月</button>
+                <button class="month-btn" data-month="2">2月</button>
+                <button class="month-btn" data-month="3">3月</button>
+                <button class="month-btn" data-month="4">4月</button>
+                <button class="month-btn" data-month="5">5月</button>
+            </div>
+            <!-- 圓餅圖 -->
             <canvas id="chart" width="400" height="200"></canvas>
         </section>
     </main>
