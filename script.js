@@ -100,6 +100,15 @@ function showPieChart(month) {
 // 預設顯示 1 月的數據
 document.addEventListener("DOMContentLoaded", () => {
     showPieChart("1月");
+
+    // 綁定月份按鈕事件
+    const buttons = document.querySelectorAll(".month-btn");
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const month = button.textContent; // 按鈕的文字即為月份名稱
+            showPieChart(month);
+        });
+    });
 });
 
 
