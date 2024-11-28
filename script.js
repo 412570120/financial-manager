@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 其他原有功能...
     // 檢查 URL 中是否包含 'logout' 參數
     window.addEventListener("load", () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -120,6 +119,40 @@ document.addEventListener("DOMContentLoaded", () => {
         closePopupButton.addEventListener("click", () => {
             const popup = document.getElementById("success-popup");
             popup.classList.add("hidden");
+        });
+    }
+
+    // 假設有登入表單
+    const loginForm = document.getElementById("login-form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // 防止表單的預設行為（刷新頁面）
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // 發送 POST 請求到後端的登入 API
+            fetch('http://localhost:3001/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            })
+            .then(response => response.json())  // 處理響應，轉換為 JSON 格式
+            .then(data => {
+                console.log(data);  // 顯示後端返回的資料
+                if (data.message === "登入成功") {
+                    alert("登入成功！");
+                    window.location.href = "home.html";  // 登入成功後跳轉到主頁
+                } else {
+                    alert(data.message);  // 顯示錯誤訊息
+                }
+            })
+            .catch(error => console.error('Error:', error));  // 錯誤處理
         });
     }
 });
