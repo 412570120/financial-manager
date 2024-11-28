@@ -33,18 +33,17 @@
     </footer>
 
     <script>
-        document.getElementById("login-form").addEventListener("submit", (e) => {
-            e.preventDefault();
-            const emailInput = document.getElementById("login-email");
-            const passwordInput = document.getElementById("login-password");
-            const email = emailInput.value;
-            const password = passwordInput.value;
+        document.getElementById("login-form").addEventListener("submit", function (e) {
+            e.preventDefault(); // 防止表單自動提交
 
-            // 透過 Fetch API 發送 POST 請求到後端登入路由
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            // 發送 POST 請求到後端伺服器
             fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email, password })
             })
@@ -52,17 +51,14 @@
             .then(data => {
                 if (data.message === '登入成功') {
                     alert("登入成功！");
-                    window.location.href = "history.html"; // 登入成功後跳轉到歷史頁面
+                    window.location.href = "history.html"; // 登入成功，跳轉到歷史頁面
                 } else {
-                    alert("登入失敗，請檢查帳號和密碼！");
-                    // 清空輸入欄位
-                    emailInput.value = "";
-                    passwordInput.value = "";
+                    alert("登入失敗：" + data.message);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('錯誤:', error);
-                alert("伺服器錯誤，請稍後再試！");
+                alert("伺服器錯誤");
             });
         });
     </script>
