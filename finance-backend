@@ -1,4 +1,4 @@
 git init
-git remote add origin https://412570120.github.io
+git remote add origin https://412570120.github.io/financial-manager/
 git commit -m "Initial commit for backend"
 git push -u origin main
