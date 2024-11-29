@@ -12,7 +12,7 @@
         <nav>
             <a href="records.html">收支記錄</a>
             <a href="history.html">我的帳簿</a>
-            <a href="#" id="logout">登出</a> <!-- 保留唯一的登出按鈕 -->
+            <a href="#" id="logout">登出</a>
         </nav>
     </header>
     <main>
@@ -24,6 +24,13 @@
             <button data-month="3">3月</button>
             <button data-month="4">4月</button>
             <button data-month="5">5月</button>
+            <button data-month="6">6月</button>
+            <button data-month="7">7月</button>
+            <button data-month="8">8月</button>
+            <button data-month="9">9月</button>
+            <button data-month="10">10月</button>
+            <button data-month="11">11月</button>
+            <button data-month="12">12月</button>
         </div>
         <canvas id="chart" width="400" height="200"></canvas>
     </section>
@@ -41,7 +48,56 @@
             alert("登出成功！");  // 彈出登出成功訊息
             window.location.href = "index.html?logout=true";  // 重定向到登入頁並附加參數
         });
+
+        // 取得月度分析資料並繪製圖表
+        document.querySelectorAll(".buttons button").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const month = e.target.getAttribute("data-month");
+                fetch(`http://localhost:3000/monthly-analysis?month=${month}`)  // 向後端發送請求
+                    .then(response => response.json())
+                    .then(data => {
+                        const incomes = [];
+                        const expenses = [];
+                        data.forEach(record => {
+                            if (record.month == month) {
+                                incomes.push(record.income);
+                                expenses.push(record.expense);
+                            }
+                        });
+
+                        // 繪製圓餅圖
+                        const ctx = document.getElementById('chart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'pie', // 圓餅圖
+                            data: {
+                                labels: ['收入', '支出'],
+                                datasets: [{
+                                    label: '金額',
+                                    data: [incomes.reduce((a, b) => a + b, 0), expenses.reduce((a, b) => a + b, 0)],
+                                    backgroundColor: ['#36A2EB', '#FF6384'],
+                                    hoverOffset: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(tooltipItem) {
+                                                return tooltipItem.label + ': ' + tooltipItem.raw + '元';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('無法取得資料:', error));
+            });
+        });
     </script>
 </body>
 </html>
-
