@@ -54,8 +54,8 @@
             .then(data => {
                 if (data.message === '登入成功') {
                     alert("登入成功！");
-                    // 儲存用戶 ID 到 localStorage
-                    localStorage.setItem('userId', data.userId);
+                    // 登入成功後儲存 userId 到 localStorage
+                    localStorage.setItem("userId", data.userId);  // 儲存 userId
                     window.location.href = "history.html"; // 登入成功，跳轉到歷史頁面
                 } else {
                     alert("登入失敗：" + data.message);
