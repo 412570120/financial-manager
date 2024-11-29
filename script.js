@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = document.getElementById("password").value;
 
             // 發送 POST 請求到後端的登入 API
-            fetch('http://localhost:3001/login', {
+            fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
