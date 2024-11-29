@@ -70,39 +70,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        const userId = localStorage.getItem("userId"); // 從 localStorage 獲取用戶 ID
-        if (!userId) {
-            alert("未登入");
-            return;
-        }
-
-        fetch(`http://localhost:3000/record?userId=${userId}`) // 把 userId 當作查詢參數傳給後端
-            .then((response) => response.json())
-            .then((data) => {
+        fetch(`${apiBaseUrl}/records`)  // 後端 API 路徑
+            .then(response => response.json())
+            .then(data => {
                 const tbody = document.getElementById("history-records");
-                if (tbody) {
-                    tbody.innerHTML = ""; // 清空現有的記錄
-                    data.forEach((record) => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${record.date}</td>
-                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
-                            <td>${record.menu}</td>
-                            <td>NT$ ${parseFloat(record.amount).toFixed(2)}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                }
+                tbody.innerHTML = ""; // 清空舊資料
+
+                data.forEach(record => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${record.date}</td>
+                        <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                        <td>${record.menu}</td>
+                        <td>NT$ ${parseFloat(record.amount).toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
             })
-            .catch((error) => console.error("無法載入記錄:", error));
+            .catch(error => {
+                console.error("無法載入記錄:", error);
+            });
     };
 
-    // 初始化收支記錄
+    // 初始載入記錄
     loadRecords();
 
     // **新增記錄**
     document.getElementById("add-record-form")?.addEventListener("submit", (e) => {
         e.preventDefault();
+
         const recordType = document.getElementById("record-type").value;
         const recordMenu = document.getElementById("record-menu").value;
         const recordAmount = document.getElementById("record-amount").value;
@@ -113,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`http://localhost:3000/record`, {
+        fetch(`${apiBaseUrl}/records`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -126,15 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.message === "新增成功") {
-                    alert("記錄新增成功！");
-                    document.getElementById("add-record-form").reset();
-                    loadRecords(); // 刷新收支記錄
+                    document.getElementById("success-popup").classList.remove("hidden");
+                    loadRecords(); // 更新記錄
                     loadChartData(); // 更新圖表數據
                 } else {
                     alert("新增失敗：" + data.message);
                 }
             })
             .catch((error) => console.error("新增記錄失敗:", error));
+    });
+
+    // 關閉成功彈窗
+    document.getElementById("close-popup")?.addEventListener("click", () => {
+        document.getElementById("success-popup").classList.add("hidden");
     });
 
     // **登出功能**
@@ -145,18 +145,13 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html?logout=true";
     });
 
-    // **成功彈窗**
-    document.getElementById("close-popup")?.addEventListener("click", () => {
-        document.getElementById("success-popup").classList.add("hidden");
-    });
-
     // **登入功能**
     document.getElementById("login-form")?.addEventListener("submit", (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        fetch(`http://localhost:3000/login`, {
+        fetch(`${apiBaseUrl}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -165,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
                 if (data.message === "登入成功") {
                     alert("登入成功！");
-                    // 假設後端返回的 data 包含用戶 ID
                     localStorage.setItem("userId", data.userId); // 儲存用戶 ID
                     window.location.href = "home.html"; // 跳轉到主頁
                 } else {
