@@ -53,7 +53,7 @@
         document.querySelectorAll(".buttons button").forEach(button => {
             button.addEventListener("click", (e) => {
                 const month = e.target.getAttribute("data-month");
-                fetch(`http://localhost:3000/monthly-analysis?month=${month}`)  // 向後端發送請求
+                fetch(`http://localhost:3000/analysis?month=${month}`)  // 向後端發送請求
                     .then(response => response.json())
                     .then(data => {
                         const incomes = [];
