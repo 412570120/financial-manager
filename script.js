@@ -32,15 +32,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入圖表數據**
     const loadChartData = (month = 1) => {
-        fetch(http://localhost:3000/chart-data?month=${month})
+        fetch(`http://localhost:3000/analysis?month=${month}`)
             .then((response) => response.json())
             .then((data) => {
+                if (!data.labels || !data.values) {
+                    console.error("返回的數據格式錯誤", data);
+                    return;
+                }
+                console.log("圖表數據:", data); // 查看數據是否正確
                 chart.data.labels = data.labels;
                 chart.data.datasets[0].data = data.values;
-                chart.data.datasets[0].label = ${month}月收入與支出;
+                chart.data.datasets[0].label = `${month}月收入與支出`;
                 chart.update();
             })
-            .catch((error) => console.error("圖表數據載入失敗:", error));
+            .catch((error) => {
+                console.error("圖表數據載入失敗:", error);
+            });
     };
 
     // 初始化圖表數據（預設1月）
@@ -56,7 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(http://localhost:3000/record)
+        const userId = localStorage.getItem("userId"); // 從 localStorage 獲取用戶 ID
+        if (!userId) {
+            alert("未登入");
+            return;
+        }
+
+        fetch(`http://localhost:3000/record?userId=${userId}`) // 把 userId 當作查詢參數傳給後端
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
@@ -64,12 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     tbody.innerHTML = ""; // 清空現有的記錄
                     data.forEach((record) => {
                         const row = document.createElement("tr");
-                        row.innerHTML = 
+                        row.innerHTML = `
                             <td>${record.date}</td>
-                            <td>${record.type}</td>
-                            <td>${record.item}</td>
-                            <td>${record.amount}</td>
-                        ;
+                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                            <td>${record.menu}</td>
+                            <td>NT$ ${parseFloat(record.amount).toFixed(2)}</td>
+                        `;
                         tbody.appendChild(row);
                     });
                 }
@@ -93,12 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(http://localhost:3000/record, {
+        fetch(`http://localhost:3000/record`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 type: recordType,
-                item: recordMenu,
+                menu: recordMenu,
                 amount: recordAmount,
                 date: recordDate,
             }),
@@ -121,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logout-link")?.addEventListener("click", (e) => {
         e.preventDefault();
         alert("登出成功！");
+        localStorage.removeItem("userId"); // 登出時移除用戶 ID
         window.location.href = "index.html?logout=true";
     });
 
@@ -135,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        fetch(http://localhost:3000/login, {
+        fetch(`http://localhost:3000/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -144,7 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
                 if (data.message === "登入成功") {
                     alert("登入成功！");
-                    window.location.href = "home.html";
+                    // 假設後端返回的 data 包含用戶 ID
+                    localStorage.setItem("userId", data.userId); // 儲存用戶 ID
+                    window.location.href = "home.html"; // 跳轉到主頁
                 } else {
                     alert(data.message);
                 }
