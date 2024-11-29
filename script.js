@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logout-link")?.addEventListener("click", (e) => {
         e.preventDefault();
         alert("登出成功！");
+        localStorage.removeItem("userId"); // 登出時移除用戶 ID
         window.location.href = "index.html?logout=true";
     });
 
@@ -151,7 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
                 if (data.message === "登入成功") {
                     alert("登入成功！");
-                    window.location.href = "home.html";
+                    // 假設後端返回的 data 包含用戶 ID
+                    localStorage.setItem("userId", data.userId); // 儲存用戶 ID
+                    window.location.href = "home.html"; // 跳轉到主頁
                 } else {
                     alert(data.message);
                 }
