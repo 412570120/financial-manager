@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人財務管理系統 - 我的帳簿</title>
+    <title>我的帳簿</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,8 +11,8 @@
         <h1>我的帳簿</h1>
         <nav>
             <a href="analysis.html">月度分析</a>
-            <a href="records.html">收支記錄</a>
-            <a href="#" id="logout">登出</a> <!-- 登出按鈕 -->
+            <a href="history.html">收支記錄</a>
+            <a href="#" id="logout">登出</a>
         </nav>
     </header>
     <main>
@@ -28,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody id="history-records">
-                    <!-- JavaScript 可用來動態生成這些記錄 -->
+                    <!-- 動態填充的收支記錄會顯示在這裡 -->
                 </tbody>
             </table>
         </section>
@@ -37,14 +37,36 @@
     <script>
         // 登出按鈕功能
         document.getElementById("logout").addEventListener("click", (e) => {
-            e.preventDefault();  // 防止連結直接跳轉
-            alert("登出成功！");  // 彈出登出成功訊息
-            window.location.href = "index.html?logout=true";  // 重定向到登入頁並附加參數
+            e.preventDefault();
+            alert("登出成功！");
+            window.location.href = "index.html?logout=true";
         });
 
         // 點擊新增記錄按鈕跳轉到收支記錄頁面
         document.getElementById("to-records-page").addEventListener("click", () => {
-            window.location.href = "records.html";  // 跳轉到 records.html
+            window.location.href = "records.html";
+        });
+
+        // 載入並顯示所有收支記錄
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('http://localhost:3000/records')  // 向後端請求收支記錄
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("history-records");
+                    data.forEach(record => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${record.date}</td>
+                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                            <td>${record.menu}</td>
+                            <td>${record.amount}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("無法載入記錄:", error);
+                });
         });
     </script>
     <footer>
