@@ -24,8 +24,8 @@
             <form id="add-record-form">
                 <label for="record-type">類型:</label>
                 <select id="record-type" required>
-                    <option value="income">收入</option>
-                    <option value="expense">支出</option>
+                    <option value="收入">收入</option>
+                    <option value="支出">支出</option>
                 </select>
 
                 <label for="record-menu">款項:</label>
@@ -46,6 +46,24 @@
             <p>新增成功！</p>
             <button id="close-popup">確定</button>
         </div>
+
+        <!-- 收支記錄表 -->
+        <section class="content-box">
+            <h2>收支記錄表</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>類型</th>
+                        <th>款項</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody id="history-records">
+                    <!-- 收支記錄動態插入 -->
+                </tbody>
+            </table>
+        </section>
     </main>
 
     <footer>
