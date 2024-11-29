@@ -63,7 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(`http://localhost:3000/record`)
+        const userId = localStorage.getItem("userId"); // 從 localStorage 獲取用戶 ID
+        if (!userId) {
+            alert("未登入");
+            return;
+        }
+
+        fetch(`http://localhost:3000/record?userId=${userId}`) // 把 userId 當作查詢參數傳給後端
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
