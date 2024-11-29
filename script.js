@@ -2,6 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBaseUrl = "http://localhost:3000"; // 後端 API 基址
     const ctx = document.getElementById("chart")?.getContext("2d");
 
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        alert("未登入");
+        window.location.href = "login.html"; // 重定向到登入頁面
+        return;
+    }
+    
     // 初始化圖表
     let chart = new Chart(ctx, {
         type: "pie",
