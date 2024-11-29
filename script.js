@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 type: recordType,
-                item: recordMenu,
+                menu: recordMenu,
                 amount: recordAmount,
                 date: recordDate,
             }),
