@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
     if (!userId) {
         alert("未登入");
-        window.location.href = "login.html"; // 重定向到登入頁面
+        window.location.href = "index.html"; // 重定向到登入頁面
         return;
     }
     
