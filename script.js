@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入圖表數據**
     const loadChartData = (month = 1) => {
-        fetch(http://localhost:3000/analysis?month=${month})
+       fetch(`http://localhost:3000/analysis?month=${month}`)
             .then((response) => response.json())
             .then((data) => {
                 if (!data.labels || !data.values) {
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(http://localhost:3000/record?userId=${userId}) // 把 userId 當作查詢參數傳給後端
+        fetch(`http://localhost:3000/record?userId=${userId}`) // 把 userId 當作查詢參數傳給後端
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
