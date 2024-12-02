@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`${apiBaseUrl}/record`, {
+        fetch(`${apiBaseUrl}/records`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
