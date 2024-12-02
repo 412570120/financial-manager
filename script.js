@@ -2,15 +2,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBaseUrl = "http://localhost:3000"; // 後端 API 基址
     const ctx = document.getElementById("chart")?.getContext("2d");
 
+    // 確認 ctx 是否有效
+    if (!ctx) {
+        console.error("無法找到圖表的上下文！");
+        return;
+    }
+
     // 初始化圖表
     let chart = new Chart(ctx, {
         type: "pie",
         data: {
-            labels: [],
+            labels: ["收入", "支出"],  // 初步設置圖表標籤
             datasets: [
                 {
                     label: "月度收入與支出",
-                    data: [],
+                    data: [0, 0],  // 初始設為 0，後續會更新
                     backgroundColor: [
                         "rgba(75, 192, 192, 0.6)",  // 收入顏色
                         "rgba(255, 99, 132, 0.6)",  // 支出顏色
@@ -33,15 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`http://localhost:3000/chart-data?month=${month}`)
             .then((response) => response.json())
             .then((data) => {
+                if (!data.values || data.values.length < 2) {
+                    console.error("後端返回的數據格式錯誤！");
+                    return;
+                }
                 // 假設後端返回的資料格式是 { "values": [收入, 支出] }
                 const incomes = data.values[0];  // 收入
                 const expenses = data.values[1];  // 支出
 
                 // 更新圖表資料
-                chart.data.labels = ['收入', '支出'];
                 chart.data.datasets[0].data = [incomes, expenses];
-                chart.data.datasets[0].label = `${month}月收入與支出`;
-                chart.update();
+                chart.update();  // 更新圖表顯示
             })
             .catch((error) => console.error("圖表數據載入失敗:", error));
     };
@@ -53,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("button[data-month]").forEach((button) => {
         button.addEventListener("click", (e) => {
             const month = e.target.getAttribute("data-month");
-            loadChartData(month);
+            loadChartData(month);  // 更新選擇月份的圖表
         });
     });
 
