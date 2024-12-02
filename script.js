@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         row.innerHTML = `
                             <td>${record.date}</td>
                             <td>${record.type}</td>
-                            <td>${record.item}</td>
+                            <td>${record.menu}</td>
                             <td>${record.amount}</td>
                         `;
                         tbody.appendChild(row);
