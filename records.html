@@ -3,53 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人財務管理系統 - 收支記錄</title>
+    <title>我的帳簿</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script defer src="script.js"></script>
 </head>
 <body>
     <header>
-        <h1 class="gradient-text">收支記錄</h1>
+        <h1>我的帳簿</h1>
         <nav>
             <a href="analysis.html">月度分析</a>
-            <a href="history.html">我的帳簿</a>
-            <a id="logout-link" href="#">登出</a>
+            <a href="history.html">收支記錄</a>
+            <a href="#" id="logout">登出</a>
         </nav>
     </header>
     <main>
-        <!-- 新增記錄 -->
         <section class="content-box">
-            <h2>新增記錄</h2>
-            <form id="add-record-form">
-                <label for="record-type">類型:</label>
-                <select id="record-type" required>
-                    <option value="income">收入</option>
-                    <option value="expense">支出</option>
-                </select>
-
-                <label for="record-menu">款項:</label>
-                <input type="text" id="record-menu" required>
-
-                <label for="record-amount">金額:</label>
-                <input type="number" id="record-amount" required>
-
-                <label for="record-date">日期:</label>
-                <input type="date" id="record-date" required>
-
-                <button type="submit">新增記錄</button>
-            </form>
-        </section>
-
-        <!-- 成功彈窗 -->
-        <div id="success-popup" class="hidden">
-            <p>新增成功！</p>
-            <button id="close-popup">確定</button>
-        </div>
-
-        <!-- 收支記錄表 -->
-        <section class="content-box">
-            <h2>收支記錄表</h2>
+            <button id="to-records-page" class="navigate-button">新增記錄</button>
             <table>
                 <thead>
                     <tr>
@@ -60,11 +28,52 @@
                     </tr>
                 </thead>
                 <tbody id="history-records">
-                    <!-- 收支記錄動態插入 -->
+                    <!-- 動態填充的收支記錄會顯示在這裡 -->
                 </tbody>
             </table>
         </section>
     </main>
+    <script src="script.js"></script>
+    <script>
+        // 登出按鈕功能
+        document.getElementById("logout").addEventListener("click", (e) => {
+            e.preventDefault();
+            alert("登出成功！");
+            window.location.href = "index.html?logout=true";
+        });
+
+        // 點擊新增記錄按鈕跳轉到收支記錄頁面
+        document.getElementById("to-records-page").addEventListener("click", () => {
+            window.location.href = "records.html";
+        });
+
+        // 載入並顯示所有收支記錄
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('http://localhost:3000/records')  // 向後端請求收支記錄
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("history-records");
+                    data.forEach(record => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = 
+                            <td>${record.date}</td>
+                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                            <td>${record.menu}</td>
+                            <td>${record.amount}</td>
+                        ;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("無法載入記錄:", error);
+                });
+        });
+    </script>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+</body>
+</html>
 
     <footer>
         <p>&copy; 2024 個人財務管理系統</p>
