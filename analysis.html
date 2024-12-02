@@ -67,14 +67,9 @@
                     fetch(`http://localhost:3000/analysis?month=${month}`)  // 向後端發送請求
                         .then(response => response.json())
                         .then(data => {
-                            const incomes = [];
-                            const expenses = [];
-                            data.forEach(record => {
-                                if (record.month == month) {
-                                    incomes.push(record.income);
-                                    expenses.push(record.expense);
-                                }
-                            });
+                            // 提取返回的資料
+                            const incomes = data.values[0];
+                            const expenses = data.values[1];
 
                             // 繪製圓餅圖
                             const ctx = document.getElementById('chart').getContext('2d');
@@ -84,7 +79,7 @@
                                     labels: ['收入', '支出'],
                                     datasets: [{
                                         label: '金額',
-                                        data: [incomes.reduce((a, b) => a + b, 0), expenses.reduce((a, b) => a + b, 0)],
+                                        data: [incomes, expenses],
                                         backgroundColor: ['#36A2EB', '#FF6384'],
                                         hoverOffset: 4
                                     }]
