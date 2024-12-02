@@ -67,7 +67,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const userId = 1; // 假設有一個用戶 ID
-            const apiUrl = http://localhost:3000/records?userId=${userId};
+            const apiUrl = `http://localhost:3000/records?userId=${userId}`;
 
             // 載入並顯示歷史記錄
             fetch(apiUrl)
@@ -78,11 +78,10 @@
                     data.forEach(record => {
                         const row = document.createElement("tr");
                         row.innerHTML = 
-                            <td>${record.date}</td>
-                            <td>${record.type === "income" ? "收入" : "支出"}</td>
-                            <td>${record.menu}</td>
-                            <td>${record.amount}</td>
-                        ;
+                            `<td>${record.date}</td>
+                             <td>${record.type === "income" ? "收入" : "支出"}</td>
+                             <td>${record.menu}</td>
+                             <td>${record.amount}</td>`;
                         tbody.appendChild(row);
                     });
                 })
@@ -123,7 +122,7 @@
                 }
 
                 // 發送新增記錄的請求
-                fetch("http://localhost:3000/record", {
+                fetch("http://localhost:3000/records", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -149,4 +148,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
