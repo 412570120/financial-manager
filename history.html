@@ -67,7 +67,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const userId = 1; // 假設有一個用戶 ID
-            const apiUrl = `http://localhost:3000/record?userId=${userId}`;
+            const apiUrl = `http://localhost:3000/records?userId=${userId}`;
 
             // 載入並顯示歷史記錄
             fetch(apiUrl)
@@ -123,7 +123,7 @@
                 }
 
                 // 發送新增記錄的請求
-                fetch("http://localhost:3000/record", {
+                fetch("http://localhost:3000/records", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
