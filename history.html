@@ -49,7 +49,8 @@
 
         // 載入並顯示所有收支記錄
         document.addEventListener("DOMContentLoaded", () => {
-            fetch('http://localhost:3000/records')  // 向後端請求收支記錄
+            const userId = 1;  // 假設用戶 ID 是 1，這應該從登入系統中獲得
+            fetch(`http://localhost:3000/records?userId=${userId}`)  // 向後端請求特定用戶的收支記錄
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById("history-records");
@@ -74,5 +75,3 @@
     </footer>
 </body>
 </html>
-
-
