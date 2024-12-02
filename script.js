@@ -2,13 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBaseUrl = "http://localhost:3000"; // 後端 API 基址
     const ctx = document.getElementById("chart")?.getContext("2d");
 
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-        alert("未登入");
-        window.location.href = "index.html"; // 重定向到登入頁面
-        return;
-    }
-    
     // 初始化圖表
     let chart = new Chart(ctx, {
         type: "pie",
@@ -39,22 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入圖表數據**
     const loadChartData = (month = 1) => {
-        fetch(`http://localhost:3000/analysis?month=${month}`)
+        fetch(`http://localhost:3000/chart-data?month=${month}`)
             .then((response) => response.json())
             .then((data) => {
-                if (!data.labels || !data.values) {
-                    console.error("返回的數據格式錯誤", data);
-                    return;
-                }
-                console.log("圖表數據:", data); // 查看數據是否正確
                 chart.data.labels = data.labels;
                 chart.data.datasets[0].data = data.values;
                 chart.data.datasets[0].label = `${month}月收入與支出`;
                 chart.update();
             })
-            .catch((error) => {
-                console.error("圖表數據載入失敗:", error);
-            });
+            .catch((error) => console.error("圖表數據載入失敗:", error));
     };
 
     // 初始化圖表數據（預設1月）
@@ -70,35 +56,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(`${apiBaseUrl}/record:userId`)  // 後端 API 路徑
-            .then(response => response.json())
-            .then(data => {
+        fetch(`${apiBaseUrl}/record`)
+            .then((response) => response.json())
+            .then((data) => {
                 const tbody = document.getElementById("history-records");
-                tbody.innerHTML = ""; // 清空舊資料
-
-                data.forEach(record => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${record.date}</td>
-                        <td>${record.type === 'income' ? '收入' : '支出'}</td>
-                        <td>${record.menu}</td>
-                        <td>NT$ ${parseFloat(record.amount).toFixed(2)}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                if (tbody) {
+                    tbody.innerHTML = ""; // 清空現有的記錄
+                    data.forEach((record) => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${record.date}</td>
+                            <td>${record.type}</td>
+                            <td>${record.item}</td>
+                            <td>${record.amount}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
             })
-            .catch(error => {
-                console.error("無法載入記錄:", error);
-            });
+            .catch((error) => console.error("無法載入記錄:", error));
     };
 
-    // 初始載入記錄
+    // 初始化收支記錄
     loadRecords();
 
     // **新增記錄**
     document.getElementById("add-record-form")?.addEventListener("submit", (e) => {
         e.preventDefault();
-
         const recordType = document.getElementById("record-type").value;
         const recordMenu = document.getElementById("record-menu").value;
         const recordAmount = document.getElementById("record-amount").value;
@@ -109,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`${apiBaseUrl}/record:userId`, {
+        fetch(`${apiBaseUrl}/record`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -122,8 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.message === "新增成功") {
-                    document.getElementById("success-popup").classList.remove("hidden");
-                    loadRecords(); // 更新記錄
+                    alert("記錄新增成功！");
+                    document.getElementById("add-record-form").reset();
+                    loadRecords(); // 刷新收支記錄
                     loadChartData(); // 更新圖表數據
                 } else {
                     alert("新增失敗：" + data.message);
@@ -132,17 +117,16 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch((error) => console.error("新增記錄失敗:", error));
     });
 
-    // 關閉成功彈窗
-    document.getElementById("close-popup")?.addEventListener("click", () => {
-        document.getElementById("success-popup").classList.add("hidden");
-    });
-
     // **登出功能**
     document.getElementById("logout-link")?.addEventListener("click", (e) => {
         e.preventDefault();
         alert("登出成功！");
-        localStorage.removeItem("userId"); // 登出時移除用戶 ID
         window.location.href = "index.html?logout=true";
+    });
+
+    // **成功彈窗**
+    document.getElementById("close-popup")?.addEventListener("click", () => {
+        document.getElementById("success-popup").classList.add("hidden");
     });
 
     // **登入功能**
@@ -160,8 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then((data) => {
                 if (data.message === "登入成功") {
                     alert("登入成功！");
-                    localStorage.setItem("userId", data.userId); // 儲存用戶 ID
-                    window.location.href = "home.html"; // 跳轉到主頁
+                    window.location.href = "home.html";
                 } else {
                     alert(data.message);
                 }
