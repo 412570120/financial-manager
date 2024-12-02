@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`http://localhost:3000/records`, {
+        fetch(`http://localhost:3000/record`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
