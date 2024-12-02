@@ -12,10 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     label: "月度收入與支出",
                     data: [],
                     backgroundColor: [
-                        "rgba(75, 192, 192, 0.6)",
-                        "rgba(255, 99, 132, 0.6)",
-                        "rgba(255, 205, 86, 0.6)",
-                        "rgba(54, 162, 235, 0.6)",
+                        "rgba(75, 192, 192, 0.6)",  // 收入顏色
+                        "rgba(255, 99, 132, 0.6)",  // 支出顏色
                     ],
                 },
             ],
@@ -35,8 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`http://localhost:3000/chart-data?month=${month}`)
             .then((response) => response.json())
             .then((data) => {
-                chart.data.labels = data.labels;
-                chart.data.datasets[0].data = data.values;
+                // 假設後端返回的資料格式是 { "values": [收入, 支出] }
+                const incomes = data.values[0];  // 收入
+                const expenses = data.values[1];  // 支出
+
+                // 更新圖表資料
+                chart.data.labels = ['收入', '支出'];
+                chart.data.datasets[0].data = [incomes, expenses];
                 chart.data.datasets[0].label = `${month}月收入與支出`;
                 chart.update();
             })
