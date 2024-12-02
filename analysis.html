@@ -39,20 +39,84 @@
     <footer>
         <p>&copy; 2024 個人財務管理系統</p>
     </footer>
+    
+    <!-- 引入 Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const userId = localStorage.getItem("userId");
 
-            // 若未登入，跳轉到登入頁面
             if (!userId) {
                 alert("未登入，請先登入");
                 window.location.href = "index.html"; // 重定向到登入頁
                 return;
             }
 
-            // 登出按鈕的功能
+            // 登出處理
             document.getElementById("logout").addEventListener("click", (e) => {
                 e.preventDefault();
+                localStorage.removeItem("userId");
                 alert("登出成功！");
-            
+                window.location.href = "index.html";
+            });
+
+            const ctx = document.getElementById("chart").getContext("2d");
+
+            let chart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["收入", "支出"],
+                    datasets: [
+                        {
+                            label: "月度收入與支出",
+                            data: [0, 0],
+                            backgroundColor: [
+                                "rgba(75, 192, 192, 0.6)",
+                                "rgba(255, 99, 132, 0.6)",
+                            ],
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        },
+                    },
+                },
+            });
+
+            // 加載圖表數據
+            const loadChartData = (month = 1) => {
+                fetch(`http://localhost:3000/analysis?month=${month}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (!data.values || data.values.length !== 2) {
+                            console.error("後端返回的數據格式錯誤！");
+                            return;
+                        }
+
+                        const incomes = data.values[0];
+                        const expenses = data.values[1];
+
+                        chart.data.datasets[0].data = [incomes, expenses];
+                        chart.update();
+                    })
+                    .catch((error) => console.error("圖表數據載入失敗:", error));
+            };
+
+            // 默認載入 1 月數據
+            loadChartData(1);
+
+            // 按月更新圖表數據
+            document.querySelectorAll("button[data-month]").forEach((button) => {
+                button.addEventListener("click", (e) => {
+                    const month = e.target.getAttribute("data-month");
+                    loadChartData(month);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
