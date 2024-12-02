@@ -70,7 +70,7 @@
             const apiUrl = `http://localhost:3000/records?userId=${userId}`;
 
             // 載入並顯示歷史記錄
-            fetch('`http://localhost:3000/records?userId=${userId}`')
+            fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById("history-records");
@@ -123,7 +123,7 @@
                 }
 
                 // 發送新增記錄的請求
-                fetch("`http://localhost:3000/records?userId=${userId}`", {
+                fetch("http://localhost:3000/record", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -150,3 +150,4 @@
     </script>
 </body>
 </html>
+
