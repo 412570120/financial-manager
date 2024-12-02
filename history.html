@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的帳簿</title>
+    <title>歷史記錄 - 我的帳簿</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,13 +11,13 @@
         <h1>我的帳簿</h1>
         <nav>
             <a href="analysis.html">月度分析</a>
-            <a href="history.html">收支記錄</a>
+            <a href="history.html" class="active">收支記錄</a>
             <a href="#" id="logout">登出</a>
         </nav>
     </header>
     <main>
         <section class="content-box">
-            <button id="to-records-page" class="navigate-button">新增記錄</button>
+            <h2>歷史記錄</h2>
             <table>
                 <thead>
                     <tr>
@@ -28,36 +28,31 @@
                     </tr>
                 </thead>
                 <tbody id="history-records">
-                    <!-- 動態填充的收支記錄會顯示在這裡 -->
+                    <!-- 動態填充的收支記錄將會顯示在這裡 -->
                 </tbody>
             </table>
         </section>
     </main>
-    <script src="script.js"></script>
+    <footer>
+        <p>&copy; 2024 個人財務管理系統</p>
+    </footer>
+
     <script>
-        // 登出按鈕功能
-        document.getElementById("logout").addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("登出成功！");
-            window.location.href = "index.html?logout=true";
-        });
-
-        // 點擊新增記錄按鈕跳轉到收支記錄頁面
-        document.getElementById("to-records-page").addEventListener("click", () => {
-            window.location.href = "records.html";
-        });
-
-        // 載入並顯示所有收支記錄
         document.addEventListener("DOMContentLoaded", () => {
-            fetch('http://localhost:3000/records')  // 向後端請求收支記錄
+            const userId = 1; // 假設有一個用戶 ID
+            const apiUrl = `http://localhost:3000/records?userId=${userId}`;
+
+            // 載入並顯示歷史記錄
+            fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById("history-records");
+                    tbody.innerHTML = ""; // 清空現有的內容
                     data.forEach(record => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${record.date}</td>
-                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                            <td>${record.type === "income" ? "收入" : "支出"}</td>
                             <td>${record.menu}</td>
                             <td>${record.amount}</td>
                         `;
@@ -66,11 +61,17 @@
                 })
                 .catch(error => {
                     console.error("無法載入記錄:", error);
+                    alert("無法載入歷史記錄，請稍後再試！");
                 });
+
+            // 登出功能
+            document.getElementById("logout").addEventListener("click", (e) => {
+                e.preventDefault();
+                alert("登出成功！");
+                window.location.href = "index.html?logout=true";
+            });
         });
     </script>
-    <footer>
-        <p>&copy; 2024 個人財務管理系統</p>
-    </footer>
 </body>
 </html>
+
