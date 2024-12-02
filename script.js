@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(`${apiBaseUrl}/records`)
+        fetch(`http://localhost:3000/records`)
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`${apiBaseUrl}/records`, {
+        fetch(`http://localhost:3000/records`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
