@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(`${apiBaseUrl}/record`)
+        fetch(`${apiBaseUrl}/records`)
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
