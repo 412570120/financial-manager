@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const userId = 1; // 假設用戶 ID 是 1，這應該從登入系統中獲得
     const apiBaseUrl = "http://localhost:3000"; // 後端 API 基址
     const ctx = document.getElementById("chart")?.getContext("2d");
 
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // **載入收支記錄**
     const loadRecords = () => {
-        fetch(`http://localhost:3000/records?userId=${userId}`) // 傳送用戶 ID
+        fetch(`http://localhost:3000/records`)  // 向後端請求所有收支記錄
             .then((response) => response.json())
             .then((data) => {
                 const tbody = document.getElementById("history-records");
@@ -102,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 menu: recordMenu,
                 amount: recordAmount,
                 date: recordDate,
-                userId: userId, // 傳送用戶 ID
             }),
         })
             .then((response) => response.json())
