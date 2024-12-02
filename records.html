@@ -49,7 +49,7 @@
 
         // 載入並顯示所有收支記錄
         document.addEventListener("DOMContentLoaded", () => {
-            fetch('http://localhost:3000/records')  // 向後端請求收支記錄
+            fetch('http://localhost:3000/records?userId=${userId}')  // 向後端請求收支記錄
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById("history-records");
