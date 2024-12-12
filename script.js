@@ -1,3 +1,4 @@
+const { JSDOM } = require('jsdom');
 const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
@@ -6,6 +7,16 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 
 dotenv.config(); // 加載環境變數
+
+// 模擬瀏覽器環境中的 DOM
+const dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`);
+const document = dom.window.document;
+
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM 模擬已加載完成");
+});
+
+console.log("執行成功：模擬瀏覽器環境中的 DOM。");
 
 const app = express();
 const port = 3000;
