@@ -1,6 +1,6 @@
 // ====== 前端共用設定 ======
 // 這是我們剛剛跑起來的本地後端網址
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://financial-manager-sl0e.onrender.com';
 
 // 確保 DOM 載入完成後才執行
 document.addEventListener('DOMContentLoaded', () => {
