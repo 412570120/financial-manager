@@ -54,9 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const data = await response.json();
 
+                // 在登入成功的 fetch 裡面
                 if (response.ok) {
-                    alert('登入成功！');
-                    window.location.href = 'records.html'; // 登入成功跳轉到記帳頁面
+                    localStorage.setItem('userId', data.userId); // 存下 user_id
+                     alert('登入成功！');
+                    window.location.href = 'records.html';
                 } else {
                     alert(`登入失敗：${data.message}`);
                 }
@@ -72,20 +74,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const recordForm = document.getElementById('add-record-form'); 
     if (recordForm) {
         recordForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // 這些 ID 必須與你 records.html 裡面的 input ID 吻合
-            const type = document.getElementById('record-type').value; // 'income' 或 'expense'
-            const menu = document.getElementById('record-menu').value;
-            const amount = document.getElementById('record-amount').value;
-            const date = document.getElementById('record-date').value;
+    e.preventDefault();
+    
+    // 🌟 從瀏覽器記憶體拿出剛剛登入存的 ID
+    const userId = localStorage.getItem('userId');
+    
+    // 安全機制：如果沒抓到 ID，代表他沒登入，把他趕回首頁
+    if (!userId) {
+        alert('請先登入！');
+        window.location.href = 'index.html';
+        return;
+    }
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/records`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type, menu, amount, date })
-                });
+    const type = document.getElementById('record-type').value;
+    const menu = document.getElementById('record-menu').value;
+    const amount = document.getElementById('record-amount').value;
+    const date = document.getElementById('record-date').value;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/records`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            // 🌟 這裡要把 userId 加進去一起打包送給後端
+            body: JSON.stringify({ userId, type, menu, amount, date }) 
+        });
 
                 if (response.ok) {
                     alert('紀錄新增成功！');
@@ -103,3 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+// ================= 4. 讀取並顯示紀錄 (GET) =================
+async function fetchAndDisplayRecords() {
+    // 🌟 從瀏覽器記憶體拿出 ID
+    const userId = localStorage.getItem('userId');
+    if (!userId) return; // 沒登入就不抓資料
+
+    try {
+        // 🌟 把 userId 加在網址後面傳給後端 (例如: /records?userId=1)
+        const response = await fetch(`${API_BASE_URL}/records?userId=${userId}`);
+        const records = await response.json();
+        
+        // 接下來就是把你抓到的 records 用迴圈顯示到 HTML 畫面上...
+        console.log(records); 
+    } catch (error) {
+        console.error('讀取紀錄失敗:', error);
+    }
+}
+
+// 確保進到 records.html 時會自動執行這支函數
+fetchAndDisplayRecords();
