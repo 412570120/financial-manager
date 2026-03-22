@@ -1,2 +1,5 @@
 .env
+finance-backend/.env
 node_modules/
+dist/
+*.log
