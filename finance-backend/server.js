@@ -31,16 +31,25 @@ db.connect(err => {
 
 // ====== 2. 自動建立資料表 (初始化) ======
 function createTablesIfNotExist() {
+    console.log("正在執行資料庫強制更新...");
+
+    // ⚠️ 這兩行是重點：先把舊的、結構錯誤的表格刪掉
+    db.query("DROP TABLE IF EXISTS records", (err) => { if(err) console.log("刪除舊 records 失敗:", err); });
+    db.query("DROP TABLE IF EXISTS users", (err) => { if(err) console.log("刪除舊 users 失敗:", err); });
+
+    // 重新建立正確結構的 users 表格
     const createUsersTable = `
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(50) NOT NULL,
             email VARCHAR(100) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL
         )
     `;
+
+    // 重新建立正確結構的 records 表格
     const createRecordsTable = `
-        CREATE TABLE IF NOT EXISTS records (
+        CREATE TABLE records (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             type VARCHAR(50) NOT NULL,
@@ -51,11 +60,13 @@ function createTablesIfNotExist() {
     `;
 
     db.query(createUsersTable, (err) => {
-        if (err) console.error("建立 users 表失敗:", err);
+        if (err) console.error("建立新版 users 表失敗:", err);
+        else console.log("✅ 新版 users 表已就緒");
     });
 
     db.query(createRecordsTable, (err) => {
-        if (err) console.error("建立 records 表失敗:", err);
+        if (err) console.error("建立新版 records 表失敗:", err);
+        else console.log("✅ 新版 records 表已就緒");
     });
 }
 
