@@ -1,37 +1,30 @@
 // ====== 前端共用設定 ======
-// 這是我們剛剛跑起來的本地後端網址
 const API_BASE_URL = 'https://financial-manager-sl0e.onrender.com';
 
-// 確保 DOM 載入完成後才執行
 document.addEventListener('DOMContentLoaded', () => {
     
     // ================= 1. 註冊功能 (對應 register.html) =================
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // 阻止表單預設的重整行為
-            
+            e.preventDefault();
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
-
             try {
                 const response = await fetch(`${API_BASE_URL}/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-
-                const data = await response.json();
-
                 if (response.ok) {
                     alert('註冊成功！請登入。');
-                    window.location.href = 'index.html'; // 註冊成功跳轉回首頁
+                    window.location.href = 'index.html';
                 } else {
+                    const data = await response.json();
                     alert(`註冊失敗：${data.message}`);
                 }
             } catch (error) {
-                console.error('註冊請求錯誤:', error);
-                alert('無法連線到伺服器，請確認後端已啟動。');
+                alert('伺服器連線失敗');
             }
         });
     }
@@ -41,140 +34,73 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-
             try {
                 const response = await fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-
                 const data = await response.json();
-
-                // 在登入成功的 fetch 裡面
                 if (response.ok) {
-                    localStorage.setItem('userId', data.userId); // 存下 user_id
-                     alert('登入成功！');
+                    localStorage.setItem('userId', data.userId);
+                    alert('登入成功！');
                     window.location.href = 'records.html';
                 } else {
                     alert(`登入失敗：${data.message}`);
                 }
             } catch (error) {
-                console.error('登入請求錯誤:', error);
-                alert('無法連線到伺服器，請確認後端已啟動。');
+                alert('伺服器連線失敗');
             }
         });
     }
 
-    // ================= 3. 新增記帳紀錄 (對應 records.html) =================
-    // 這裡我假設你的 records.html 裡面有一個 id 為 'add-record-form' 的表單
-    const recordForm = document.getElementById('add-record-form'); 
+    // ================= 3. 新增紀錄 (對應 records.html) =================
+    const recordForm = document.getElementById('record-form');
     if (recordForm) {
         recordForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // 🌟 從瀏覽器記憶體拿出剛剛登入存的 ID
-    const userId = localStorage.getItem('userId');
-    
-    // 安全機制：如果沒抓到 ID，代表他沒登入，把他趕回首頁
-    if (!userId) {
-        alert('請先登入！');
-        window.location.href = 'index.html';
-        return;
-    }
+            e.preventDefault();
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                alert('請先登入！');
+                window.location.href = 'index.html';
+                return;
+            }
 
-    const type = document.getElementById('record-type').value;
-    const menu = document.getElementById('record-menu').value;
-    const amount = document.getElementById('record-amount').value;
-    const date = document.getElementById('record-date').value;
+            // ⭐ 這裡的 ID 已經根據你的 HTML 修正為 date, type, menu, amount
+            const date = document.getElementById('date').value;
+            const type = document.getElementById('type').value;
+            const menu = document.getElementById('menu').value;
+            const amount = document.getElementById('amount').value;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/records`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // 🌟 這裡要把 userId 加進去一起打包送給後端
-            body: JSON.stringify({ userId, type, menu, amount, date }) 
-        });
+            try {
+                const response = await fetch(`${API_BASE_URL}/records`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, type, menu, amount, date }) 
+                });
 
                 if (response.ok) {
                     alert('紀錄新增成功！');
-                    // 可選：新增成功後清空表單
                     recordForm.reset(); 
                 } else {
-                    const data = await response.json();
-                    alert(`新增失敗：${data.message}`);
+                    alert('新增失敗');
                 }
             } catch (error) {
-                console.error('新增紀錄錯誤:', error);
                 alert('連線失敗。');
             }
         });
     }
 
-});
-
-// 1. 讀取並顯示紀錄 (GET)
-async function fetchAndDisplayRecords() {
-    // 拿出剛剛登入時存的 userId
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-        console.log("尚未登入，無法載入紀錄");
-        return;
-    }
-
-    try {
-        // 網址後面帶上 userId
-        const response = await fetch(`${API_BASE_URL}/records?userId=${userId}`);
-        const records = await response.json();
-        
-        // --- 下面保留你原本把 records 畫到 HTML 上的迴圈邏輯 ---
-        console.log("成功抓取專屬紀錄:", records);
-        // 例如: updateUI(records);
-    } catch (error) {
-        console.error('讀取紀錄失敗:', error);
-    }
-}
-
-// 2. 新增紀錄 (POST)
-const recordForm = document.getElementById('record-form'); // 確認你的 form ID
-if(recordForm) {
-    recordForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-            alert('請先登入！');
+    // ================= 4. 登出功能 =================
+    const logoutBtn = document.getElementById('logout');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('userId'); // 清除登入狀態
+            alert('已成功登出');
             window.location.href = 'index.html';
-            return;
-        }
-
-        const type = document.getElementById('record-type').value;
-        const menu = document.getElementById('record-menu').value;
-        const amount = document.getElementById('record-amount').value;
-        const date = document.getElementById('record-date').value;
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/records`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                // 把 userId 一起包裝送出
-                body: JSON.stringify({ userId, type, menu, amount, date }) 
-            });
-
-            if (response.ok) {
-                alert('新增成功！');
-                fetchAndDisplayRecords(); // 重新載入畫面
-            } else {
-                alert('新增失敗');
-            }
-        } catch (error) {
-            console.error('錯誤:', error);
-        }
-    });
-}
-
-// 網頁載入時自動執行抓取
-fetchAndDisplayRecords();
+        });
+    }
+});
