@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     localStorage.setItem('userId', data.userId);
                     alert('登入成功！');
-                    window.location.href = 'records.html';
+                    window.location.href = 'record.html';
                 } else {
                     alert(`登入失敗：${data.message}`);
                 }
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================= 3. 新增紀錄 (對應 records.html) =================
+    // ================= 3. 新增紀錄 (對應 record.html) =================
     const recordForm = document.getElementById('record-form');
     if (recordForm) {
         recordForm.addEventListener('submit', async (e) => {
