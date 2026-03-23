@@ -103,4 +103,76 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'index.html';
         });
     }
+
+    // 在 script.js 的 DOMContentLoaded 裡面加入這段
+    const historyTable = document.getElementById("history-records");
+        if (historyTable) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            window.location.href = 'index.html';
+        } else {
+        // 向後端請求該使用者的專屬紀錄
+            fetch(`${API_BASE_URL}/records?userId=${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    historyTable.innerHTML = data.map(record => `
+                        <tr>
+                            <td>${record.date}</td>
+                            <td>${record.type === 'income' ? '收入' : '支出'}</td>
+                            <td>${record.menu}</td>
+                            <td>$${record.amount}</td>
+                        </tr>
+                    `).join('');
+            })
+            .catch(err => console.error("無法載入紀錄:", err));
+        }
+    }
+
+
+    // 在 script.js 裡處理圖表邏輯
+    const chartCanvas = document.getElementById("chart");
+    if (chartCanvas) {
+        const ctx = chartCanvas.getContext("2d");
+        const userId = localStorage.getItem("userId");
+
+        if (!userId) {
+            window.location.href = "index.html";
+            return;
+        }
+
+        // 初始化 Chart
+        let chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: ["收入", "支出"],
+                datasets: [{
+                    label: "月度收入與支出",
+                    data: [0, 0],
+                    backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"]
+                }]
+            }
+        });
+
+        const loadChartData = (month = 1) => {
+            // 🌟 改成雲端網址，並補上 userId 🌟
+            fetch(`${API_BASE_URL}/analysis?userId=${userId}&month=${month}`)
+                .then(res => res.json())
+                .then(data => {
+                    // 假設後端回傳格式為 { values: [incomeTotal, expenseTotal] }
+                    chart.data.datasets[0].data = data.values;
+                    chart.update();
+                })
+                .catch(err => console.error("圖表載入失敗:", err));
+        };
+
+        // 預設載入當前月份 (這裡以 1 月為例，也可以寫成 new Date().getMonth() + 1)
+        loadChartData(1);
+
+        document.querySelectorAll("button[data-month]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const month = e.target.getAttribute("data-month");
+                loadChartData(month);
+            });
+        });
+    }
 });

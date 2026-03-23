@@ -38,51 +38,6 @@
         </section>
     </main>
     <script src="script.js"></script>
-    <script>
-        // 登出按鈕功能
-        document.getElementById("logout").addEventListener("click", (e) => {
-            e.preventDefault();
-            alert("登出成功！");
-            window.location.href = "index.html?logout=true";
-        });
-
-        // 處理表單提交
-        document.getElementById("record-form").addEventListener("submit", (e) => {
-            e.preventDefault();  // 防止表單直接提交
-
-            // 獲取表單資料
-            const date = document.getElementById("date").value;
-            const type = document.getElementById("type").value;
-            const menu = document.getElementById("menu").value;
-            const amount = document.getElementById("amount").value;
-
-            // 構建新紀錄資料
-            const newRecord = {
-                date: date,
-                type: type,
-                menu: menu,
-                amount: amount
-            };
-
-            // 發送 POST 請求將新紀錄儲存到後端
-            fetch('http://localhost:3000/records', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newRecord)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert("紀錄已成功新增！");
-                window.location.href = "history.html";  // 新增完成後返回收支記錄頁面
-            })
-            .catch(error => {
-                console.error("無法新增紀錄:", error);
-                alert("新增紀錄失敗，請稍後再試！");
-            });
-        });
-    </script>
     <footer>
         <p>&copy; 2024 個人財務管理系統</p>
     </footer>

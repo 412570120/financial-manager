@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ====== 1. 資料庫連線設定 (支援 Aiven SSL) ======
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -28,6 +29,7 @@ db.connect(err => {
     createTablesIfNotExist();
 });
 
+// ====== 2. 自動建立資料表 (初始化) ======
 function createTablesIfNotExist() {
     const createUsersTable = `
         CREATE TABLE IF NOT EXISTS users (
@@ -37,7 +39,6 @@ function createTablesIfNotExist() {
             password VARCHAR(255) NOT NULL
         )
     `;
-    // 這裡加入了 user_id，並且沒有 DROP TABLE 指令了，十分安全！
     const createRecordsTable = `
         CREATE TABLE IF NOT EXISTS records (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,15 +59,22 @@ function createTablesIfNotExist() {
     });
 }
 
-// 註冊 API
+// ====== 3. API 路由設定 ======
+
+// [POST] 註冊功能
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
+    // 防呆：如果前端沒傳 username，就用 email 的前綴當名字
+    const finalUsername = username || email.split('@')[0];
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword],
+            [finalUsername, email, hashedPassword],
             (err, results) => {
-                if (err) return res.status(400).json({ message: '信箱可能已註冊' });
+                if (err) {
+                    console.error("註冊失敗:", err);
+                    return res.status(400).json({ message: '此信箱可能已註冊過囉！' });
+                }
                 res.status(201).json({ message: '註冊成功' });
             }
         );
@@ -75,7 +83,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// 登入 API (新增回傳 userId)
+// [POST] 登入功能
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
@@ -85,15 +93,18 @@ app.post('/login', (req, res) => {
         const user = results[0];
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
-            // 登入成功時，把這個人的專屬 ID 傳給前端
-            res.status(200).json({ message: '登入成功', userId: user.id });
+            // 登入成功，回傳 userId 給前端存在 localStorage
+            res.status(200).json({ 
+                message: '登入成功', 
+                userId: user.id 
+            });
         } else {
-            res.status(400).json({ message: '密碼錯誤' });
+            res.status(400).json({ message: '密碼錯誤，請再試一次' });
         }
     });
 });
 
-// 新增紀錄 API (強制綁定 userId)
+// [POST] 新增收支紀錄
 app.post('/records', (req, res) => {
     const { userId, type, menu, amount, date } = req.body;
     if (!userId) return res.status(400).json({ message: '請先登入' });
@@ -101,24 +112,55 @@ app.post('/records', (req, res) => {
     db.query('INSERT INTO records (user_id, type, menu, amount, date) VALUES (?, ?, ?, ?, ?)',
         [userId, type, menu, amount, date],
         (err, results) => {
-            if (err) return res.status(500).json({ message: '新增失敗' });
-            res.status(201).json({ message: '新增成功' });
+            if (err) {
+                console.error("新增紀錄失敗:", err);
+                return res.status(500).json({ message: '資料寫入失敗' });
+            }
+            res.status(201).json({ message: '紀錄新增成功' });
         }
     );
 });
 
-// 取得紀錄 API (只抓取該使用者的紀錄)
+// [GET] 取得該使用者的所有紀錄
 app.get('/records', (req, res) => {
     const userId = req.query.userId;
     if (!userId) return res.status(400).json({ message: '請先登入' });
 
     db.query('SELECT * FROM records WHERE user_id = ? ORDER BY date DESC', [userId], (err, results) => {
-        if (err) return res.status(500).json({ message: '讀取失敗' });
+        if (err) return res.status(500).json({ message: '讀取資料失敗' });
         res.status(200).json(results);
     });
 });
 
+// [GET] 月度分析數據 (提供給 Chart.js)
+app.get('/analysis', (req, res) => {
+    const { userId, month } = req.query;
+    if (!userId) return res.status(400).json({ message: '請先登入' });
+
+    const sql = `
+        SELECT 
+            SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS total_income,
+            SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expense
+        FROM records 
+        WHERE user_id = ? AND MONTH(date) = ?
+    `;
+
+    db.query(sql, [userId, month], (err, results) => {
+        if (err) {
+            console.error("分析查詢失敗:", err);
+            return res.status(500).json({ message: '分析數據讀取失敗' });
+        }
+        const row = results[0];
+        // 格式化為前端圖表需要的陣列: [收入總計, 支出總計]
+        res.status(200).json({ 
+            values: [Number(row.total_income || 0), Number(row.total_expense || 0)] 
+        });
+    });
+});
+
+// ====== 4. 啟動伺服器 ======
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`後端伺服器運行中: http://localhost:${PORT}`);
+    console.log(`🚀 後端伺服器運行中: http://localhost:${PORT}`);
+    console.log(`🌍 雲端環境請確認已設定 Environment Variables`);
 });

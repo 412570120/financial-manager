@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,6 @@
         <h1>個人財務管理系統</h1>
     </header>
     <main>
-        <!-- 登入區 -->
         <section class="content-box">
             <h2>登入</h2>
             <form id="login-form">
@@ -23,7 +22,6 @@
             </form>
         </section>
 
-        <!-- 註冊按鈕 -->
         <div class="content-box">
             <p>還沒有帳號？<a href="register.html">註冊</a></p>
         </div>
@@ -32,36 +30,6 @@
         <p>&copy; 2024 個人財務管理系統</p>
     </footer>
 
-    <script>
-    // 確保這裡寫的是 Render 網址！
-    const API_BASE_URL = 'https://financial-manager-sl0e.onrender.com';
-
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                // 🌟 最重要的一步：把 userId 存在瀏覽器裡
-                localStorage.setItem('userId', data.userId);
-                alert('登入成功！');
-                window.location.href = 'record.html'; 
-            } else {
-                alert(`登入失敗: ${data.message}`);
-            }
-        } catch (error) {
-            console.error('錯誤:', error);
-            alert('伺服器連線失敗');
-        }
-    });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
