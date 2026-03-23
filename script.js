@@ -116,23 +116,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// ================= 4. 讀取並顯示紀錄 (GET) =================
+// 1. 讀取並顯示紀錄 (GET)
 async function fetchAndDisplayRecords() {
-    // 🌟 從瀏覽器記憶體拿出 ID
+    // 拿出剛剛登入時存的 userId
     const userId = localStorage.getItem('userId');
-    if (!userId) return; // 沒登入就不抓資料
+    if (!userId) {
+        console.log("尚未登入，無法載入紀錄");
+        return;
+    }
 
     try {
-        // 🌟 把 userId 加在網址後面傳給後端 (例如: /records?userId=1)
+        // 網址後面帶上 userId
         const response = await fetch(`${API_BASE_URL}/records?userId=${userId}`);
         const records = await response.json();
         
-        // 接下來就是把你抓到的 records 用迴圈顯示到 HTML 畫面上...
-        console.log(records); 
+        // --- 下面保留你原本把 records 畫到 HTML 上的迴圈邏輯 ---
+        console.log("成功抓取專屬紀錄:", records);
+        // 例如: updateUI(records);
     } catch (error) {
         console.error('讀取紀錄失敗:', error);
     }
 }
 
-// 確保進到 records.html 時會自動執行這支函數
+// 2. 新增紀錄 (POST)
+const recordForm = document.getElementById('record-form'); // 確認你的 form ID
+if(recordForm) {
+    recordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert('請先登入！');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const type = document.getElementById('record-type').value;
+        const menu = document.getElementById('record-menu').value;
+        const amount = document.getElementById('record-amount').value;
+        const date = document.getElementById('record-date').value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/records`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // 把 userId 一起包裝送出
+                body: JSON.stringify({ userId, type, menu, amount, date }) 
+            });
+
+            if (response.ok) {
+                alert('新增成功！');
+                fetchAndDisplayRecords(); // 重新載入畫面
+            } else {
+                alert('新增失敗');
+            }
+        } catch (error) {
+            console.error('錯誤:', error);
+        }
+    });
+}
+
+// 網頁載入時自動執行抓取
 fetchAndDisplayRecords();

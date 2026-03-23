@@ -33,39 +33,35 @@
     </footer>
 
     <script>
-        // 登入表單處理
-        document.getElementById("login-form").addEventListener("submit", function (e) {
-            e.preventDefault(); // 防止表單自動提交
+    // 確保這裡寫的是 Render 網址！
+    const API_BASE_URL = 'https://financial-manager-sl0e.onrender.com';
 
-            const email = document.getElementById("login-email").value;
-            const password = document.getElementById("login-password").value;
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            console.log("前端提交資料:", { email, password });  // 查看提交的資料
-
-            // 發送 POST 請求到後端伺服器
-            fetch('http://localhost:3000/login', {
+        try {
+            const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === '登入成功') {
-                    alert("登入成功！");
-                    // 登入成功後儲存 userId 到 localStorage
-                    localStorage.setItem("userId", data.userId);  // 儲存 userId
-                    window.location.href = "history.html"; // 登入成功，跳轉到歷史頁面
-                } else {
-                    alert("登入失敗：" + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('錯誤:', error);
-                alert("伺服器錯誤");
             });
-        });
+            const data = await response.json();
+
+            if (response.ok) {
+                // 🌟 最重要的一步：把 userId 存在瀏覽器裡
+                localStorage.setItem('userId', data.userId);
+                alert('登入成功！');
+                window.location.href = 'records.html'; 
+            } else {
+                alert(`登入失敗: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('錯誤:', error);
+            alert('伺服器連線失敗');
+        }
+    });
     </script>
 </body>
 </html>
