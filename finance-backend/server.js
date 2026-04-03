@@ -1,14 +1,15 @@
-const express = require('express');
-const mysql = require('mysql2');
-const cors = require('cors');
-const bcrypt = require('bcrypt');
-require('dotenv').config();
+//引入外部套件
+const express = require('express'); //網頁框架套件
+const mysql = require('mysql2');//資料庫連線套件
+const cors = require('cors');//跨資源共用套件
+const bcrypt = require('bcrypt');//密碼加密套件
+require('dotenv').config();//環境變數套件，讀取env檔案
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(cors()); //允許跨域請求
+app.use(express.json()); //解析 JSON 格式
 
-// ====== 1. 資料庫連線設定 (支援 Aiven SSL) ======
+// Aiven 資料庫連線設定 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -16,28 +17,23 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     ssl: {
-        rejectUnauthorized: false 
+        rejectUnauthorized: false //確保不因憑證驗證問題中斷
     }
 });
 
+//
 db.connect(err => {
     if (err) {
         console.error('資料庫連線失敗:', err);
         return;
     }
-    console.log('成功連接到 Aiven 雲端 MySQL 資料庫！');
+    console.log('成功連接到 Aiven 雲端 MySQL 資料庫');
     createTablesIfNotExist();
 });
 
-// ====== 2. 自動建立資料表 (初始化) ======
+// 自動建立資料表 (初始化) 
 function createTablesIfNotExist() {
-    console.log("正在執行資料庫強制更新...");
-
-    // ⚠️ 這兩行是重點：先把舊的、結構錯誤的表格刪掉
-    db.query("DROP TABLE IF EXISTS records", (err) => { if(err) console.log("刪除舊 records 失敗:", err); });
-    db.query("DROP TABLE IF EXISTS users", (err) => { if(err) console.log("刪除舊 users 失敗:", err); });
-
-    // 重新建立正確結構的 users 表格
+    // 建立 users 表格
     const createUsersTable = `
         CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +43,7 @@ function createTablesIfNotExist() {
         )
     `;
 
-    // 重新建立正確結構的 records 表格
+    // 建立 records 表格
     const createRecordsTable = `
         CREATE TABLE records (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,22 +56,22 @@ function createTablesIfNotExist() {
     `;
 
     db.query(createUsersTable, (err) => {
-        if (err) console.error("建立新版 users 表失敗:", err);
-        else console.log("✅ 新版 users 表已就緒");
+        if (err) console.error("建立 users 表失敗:", err);
+        else console.log("users 表已就緒");
     });
 
     db.query(createRecordsTable, (err) => {
-        if (err) console.error("建立新版 records 表失敗:", err);
-        else console.log("✅ 新版 records 表已就緒");
+        if (err) console.error("建立 records 表失敗:", err);
+        else console.log("records 表已就緒");
     });
 }
 
-// ====== 3. API 路由設定 ======
+// API 路由設定 
 
 // [POST] 註冊功能
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
-    // 防呆：如果前端沒傳 username，就用 email 的前綴當名字
+    // 如果前端沒傳 username，就用 email 的前綴當名字
     const finalUsername = username || email.split('@')[0];
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -169,9 +165,9 @@ app.get('/analysis', (req, res) => {
     });
 });
 
-// ====== 4. 啟動伺服器 ======
+// 啟動伺服器
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 後端伺服器運行中: http://localhost:${PORT}`);
-    console.log(`🌍 雲端環境請確認已設定 Environment Variables`);
+    console.log(`後端伺服器運行中: http://localhost:${PORT}`);
+    console.log(`雲端環境請確認已設定 Environment Variables`);
 });

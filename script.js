@@ -1,9 +1,10 @@
-// ====== 前端共用設定 ======
+// 前端共用設定 
 const API_BASE_URL = 'https://financial-manager-sl0e.onrender.com';
 
+//DOMContentLoaded 事件確保整個 HTML 文件被完全加載和解析後才執行 JavaScript 代碼
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ================= 1. 註冊功能 (對應 register.html) =================
+    // 註冊功能 register.html
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
@@ -29,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================= 2. 登入功能 (對應 index.html) =================
+    // 登入功能 index.html
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); //阻止網頁預設的重整行為
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             try {
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================= 3. 新增紀錄 (對應 record.html) =================
+    // 新增紀錄 record.html
     const recordForm = document.getElementById('record-form');
     if (recordForm) {
         recordForm.addEventListener('submit', async (e) => {
@@ -68,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // ⭐ 這裡的 ID 已經根據你的 HTML 修正為 date, type, menu, amount
             const date = document.getElementById('date').value;
             const type = document.getElementById('type').value;
             const menu = document.getElementById('menu').value;
@@ -93,25 +93,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================= 4. 登出功能 =================
+    // 登出功能 
     const logoutBtn = document.getElementById('logout');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('userId'); // 清除登入狀態
+            localStorage.removeItem('userId');
             alert('已成功登出');
             window.location.href = 'index.html';
         });
     }
 
-    // 在 script.js 的 DOMContentLoaded 裡面加入這段
+    //歷史紀錄 record.html
     const historyTable = document.getElementById("history-records");
         if (historyTable) {
         const userId = localStorage.getItem('userId');
         if (!userId) {
             window.location.href = 'index.html';
         } else {
-        // 向後端請求該使用者的專屬紀錄
             fetch(`${API_BASE_URL}/records?userId=${userId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -128,8 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-    // 在 script.js 裡處理圖表邏輯
+    // 圖表分析 analysis.html
     const chartCanvas = document.getElementById("chart");
     if (chartCanvas) {
         const ctx = chartCanvas.getContext("2d");
@@ -140,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 初始化 Chart
         let chart = new Chart(ctx, {
             type: "pie",
             data: {
@@ -154,18 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const loadChartData = (month = 1) => {
-            // 🌟 改成雲端網址，並補上 userId 🌟
             fetch(`${API_BASE_URL}/analysis?userId=${userId}&month=${month}`)
                 .then(res => res.json())
                 .then(data => {
-                    // 假設後端回傳格式為 { values: [incomeTotal, expenseTotal] }
                     chart.data.datasets[0].data = data.values;
                     chart.update();
                 })
                 .catch(err => console.error("圖表載入失敗:", err));
         };
 
-        // 預設載入當前月份 (這裡以 1 月為例，也可以寫成 new Date().getMonth() + 1)
         loadChartData(1);
 
         document.querySelectorAll("button[data-month]").forEach(btn => {
